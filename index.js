@@ -1,11 +1,30 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const path = require("path");
 const router = require('./routes/index');
+require('dotenv').config();
 
 // Crea el servidor
 const app = express();
 const port = process.env.PORT || 9000;
+
+// Conexión a MongoDB Atlas
+mongoose.set('strictQuery', false);
+mongoose.connect(
+    `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.nsamh.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+);
+
+mongoose.connection.on('connected', () => {
+    console.log('Conectado a la instancia de Mongo');
+});
+mongoose.connection.on('error', (err) => {
+    console.log('Error al conectarse a Mongo', err);
+});
 
 // Habilitar Handlebars como Template Engine
 app.engine(
