@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const path = require("path");
+const bodyParser = require('body-parser');
 const router = require('./routes/index');
 require('dotenv').config();
 
@@ -25,6 +26,10 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
     console.log('Error al conectarse a Mongo', err);
 });
+
+// Habilitar middlewares
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar Handlebars como Template Engine
 app.engine(
