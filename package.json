@@ -1,0 +1,34 @@
+{
+  "name": "lista-quehaceres",
+  "version": "1.0.0",
+  "description": "Lista de quehaceres Code Challenge de PixelPay",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sovilleda07/lista-quehaceres.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongoose",
+    "handlebars"
+  ],
+  "author": "Sonia Villeda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sovilleda07/lista-quehaceres/issues"
+  },
+  "homepage": "https://github.com/sovilleda07/lista-quehaceres#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "mongoose": "^6.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
