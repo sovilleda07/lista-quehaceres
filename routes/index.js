@@ -10,5 +10,8 @@ module.exports = () => {
     // Agregar un quehacer
     router.post('/api/agregarQuehacer', apiController.agregarQuehacer);
 
+    // Listar quehaceres
+    router.get('/api/quehaceres', apiController.listarQuehaceres);
+
     return router;
 };

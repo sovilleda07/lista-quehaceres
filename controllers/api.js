@@ -42,3 +42,32 @@ exports.agregarQuehacer = async (req, res) => {
         }
     }
 };
+
+// Listar todos los quehaceres
+exports.listarQuehaceres = async (req, res) => {
+    try {
+        // Realizar la consulta
+        const losQuehaceres = await Quehacer.find({});
+
+        // Si no hay quehaceres registrados
+        if (losQuehaceres.length === 0) {
+            res.status(404).send({
+                error: null,
+                mensaje: 'No hay quehaceres registrados.',
+                resultado: null,
+            });
+        } else {
+            res.status(200).send({
+                error: null,
+                mensaje: 'Listando quehaceres',
+                resultado: losQuehaceres,
+            });
+        }
+    } catch (error) {
+        res.status(422).send({
+            error: error,
+            mensaje: 'Hubo un problema al momento de obtener los quehaceres.',
+            resultado: null,
+        });
+    }
+};
