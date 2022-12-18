@@ -31,5 +31,8 @@ module.exports = () => {
         apiController.eliminarQuehaceresCompletados
     );
 
+    // Eliminar todos los quehaceres
+    router.delete('/api/eliminarQuehaceresTodos', apiController.eliminarTodos);
+
     return router;
 };

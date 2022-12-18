@@ -119,6 +119,53 @@ exports.editarQuehacer = async (req, res) => {
     }
 };
 
+// Cambiar el estado del quehacer
+exports.cambiarEstadoQuehacer = async (req, res) => {
+    // Obtener el id del quehacer
+    const { id } = req.params;
+
+    try {
+        // Realizar actualización, enviando el filtro del id
+        const elQuehacer = await Quehacer.findOneAndUpdate(
+            { _id: id },
+            [{ $set: { completado: { $eq: [false, '$completado'] } } }],
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+
+        // Evaluamos si se realizó la operación
+        if (!elQuehacer) {
+            // Sino se actualizó, el quehacer no existe
+            res.status(404).send({
+                error: null,
+                mensaje: 'El quehacer no existe.',
+                resultado: null,
+            });
+        } else {
+            // Confirmar actualización
+            res.status(200).send({
+                error: null,
+                mensaje: elQuehacer.completado
+                    ? 'El Quehacer se completó.'
+                    : 'El Quehacer no se ha completado.',
+                resultado: null,
+            });
+        }
+    } catch (error) {
+        // Si ocurrió algún error, lo atrapamos y lo enviamos
+        res.status(422).send({
+            error: error,
+            mensaje:
+                error.name === 'CastError'
+                    ? 'Id del quehacer incorrecto'
+                    : 'Hubo un problema al momento de realizar la actualización',
+            resultado: null,
+        });
+    }
+};
+
 // Eliminar un quehacer
 exports.eliminarQuehacer = async (req, res) => {
     // Obtener el id del quehacer
@@ -189,37 +236,25 @@ exports.eliminarQuehaceresCompletados = async (req, res) => {
     }
 };
 
-// Cambiar el estado del quehacer
-exports.cambiarEstadoQuehacer = async (req, res) => {
-    // Obtener el id del quehacer
-    const { id } = req.params;
-
+// Eliminar todos los quehaceres
+exports.eliminarTodos = async (req, res) => {
     try {
-        // Realizar actualización, enviando el filtro del id
-        const elQuehacer = await Quehacer.findOneAndUpdate(
-            { _id: id },
-            [{ $set: { completado: { $eq: [false, '$completado'] } } }],
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
+        // Enviar objeto en blanco, para eliminar todos los documentos
+        const losQuehaceres = await Quehacer.deleteMany({});
 
         // Evaluamos si se realizó la operación
-        if (!elQuehacer) {
-            // Sino se actualizó, el quehacer no existe
+        if (!losQuehaceres || losQuehaceres.deletedCount == 0) {
+            // Sino se elimina, no hay quehaceres
             res.status(404).send({
                 error: null,
-                mensaje: 'El quehacer no existe.',
+                mensaje: 'No hay quehaceres registrados.',
                 resultado: null,
             });
         } else {
-            // Confirmar actualización
+            // Confirmar eliminación
             res.status(200).send({
                 error: null,
-                mensaje: elQuehacer.completado
-                    ? 'El Quehacer se completó.'
-                    : 'El Quehacer no se ha completado.',
+                mensaje: 'Se eliminaron todos los quehaceres',
                 resultado: null,
             });
         }
@@ -227,10 +262,7 @@ exports.cambiarEstadoQuehacer = async (req, res) => {
         // Si ocurrió algún error, lo atrapamos y lo enviamos
         res.status(422).send({
             error: error,
-            mensaje:
-                error.name === 'CastError'
-                    ? 'Id del quehacer incorrecto'
-                    : 'Hubo un problema al momento de realizar la actualización',
+            mensaje: 'Hubo un problema al momento de eliminar los quehaceres.',
             resultado: null,
         });
     }
