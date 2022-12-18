@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
-const path = require("path");
+const path = require('path');
 const bodyParser = require('body-parser');
 const router = require('./routes/index');
 require('dotenv').config();
@@ -34,15 +34,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Habilitar Handlebars como Template Engine
 app.engine(
     'handlebars',
-    exphbs.engine({ extname: '.handlebars', defaultLayout: 'layout' })
+    exphbs.engine({
+        extname: '.handlebars',
+        defaultLayout: 'layout',
+        partialsDir: __dirname + '/views/partials/',
+    })
 );
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
 // Definir ruta para archivos estáticos
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Implementar rutas
-app.use("/", router());
+app.use('/', router());
 
 app.listen(port, () => console.log('servidor escuchando en puerto', port));
