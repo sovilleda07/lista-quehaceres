@@ -16,5 +16,8 @@ module.exports = () => {
     // Actualizar quehacer
     router.put('/api/editarQuehacer/:id', apiController.editarQuehacer);
 
+    // Eliminar un quehacer
+    router.delete('/api/eliminarQuehacer/:id', apiController.eliminarQuehacer);
+
     return router;
 };
