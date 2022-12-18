@@ -1,3 +1,15 @@
+:root {
+    --space-cadet: #16315cff;
+    --violet-red: #eb5e92ff;
+    --cyclamen: #ed78a4ff;
+    --amaranth-pink: #f69bbeff;
+    --cameo-pink: #eab9ceff;
+    --mimi-pink: #f4d0dcff;
+    --white: #fff;
+}
+
 body {
+    background-color: var(--space-cadet);
     font-family: 'Lexend', sans-serif;
+    color: var(--white);
 }
