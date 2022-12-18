@@ -156,3 +156,35 @@ exports.eliminarQuehacer = async (req, res) => {
         });
     }
 };
+
+// Eliminar quehaceres completados
+exports.eliminarQuehaceresCompletados = async (req, res) => {
+    try {
+        // Eliminar todos los completado == true
+        const losQuehaceres = await Quehacer.deleteMany({ completado: true });
+
+        // Evaluamos si se realizó la operación
+        if (!losQuehaceres || losQuehaceres.deletedCount == 0) {
+            // Sino se elimina, no hay quehaceres completados
+            res.status(404).send({
+                error: null,
+                mensaje: 'No hay quehaceres completados.',
+                resultado: null,
+            });
+        } else {
+            // Confirmar eliminación
+            res.status(200).send({
+                error: null,
+                mensaje: `Se eliminaron ${losQuehaceres.deletedCount} quehaceres.`,
+                resultado: null,
+            });
+        }
+    } catch (error) {
+        // Si ocurrió algún error, lo atrapamos y lo enviamos
+        res.status(422).send({
+            error: error,
+            mensaje: 'Hubo un problema al momento de eliminar los quehaceres.',
+            resultado: null,
+        });
+    }
+};

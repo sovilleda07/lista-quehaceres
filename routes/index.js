@@ -19,5 +19,11 @@ module.exports = () => {
     // Eliminar un quehacer
     router.delete('/api/eliminarQuehacer/:id', apiController.eliminarQuehacer);
 
+    // Eliminar quehaceres completados
+    router.delete(
+        '/api/eliminarQuehaceresCompletados',
+        apiController.eliminarQuehaceresCompletados
+    );
+
     return router;
 };
