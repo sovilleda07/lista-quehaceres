@@ -13,5 +13,8 @@ module.exports = () => {
     // Listar quehaceres
     router.get('/api/quehaceres', apiController.listarQuehaceres);
 
+    // Actualizar quehacer
+    router.put('/api/editarQuehacer/:id', apiController.editarQuehacer);
+
     return router;
 };

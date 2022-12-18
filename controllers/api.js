@@ -71,3 +71,47 @@ exports.listarQuehaceres = async (req, res) => {
         });
     }
 };
+
+// Editar un quehacer
+exports.editarQuehacer = async (req, res) => {
+    // Obtener el id del quehacer
+    const { id } = req.params;
+    // Destructuring del nombre de la tarea
+    const { tarea } = req.body;
+
+    try {
+        // Realizar actualización, enviando el filtro del id
+        const elQuehacer = await Quehacer.findOneAndUpdate(
+            { _id: id },
+            { $set: { tarea: tarea, fechaModificado: new Date() } },
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+
+        // Evaluamos si se realizó la operación
+        if (!elQuehacer) {
+            // Sino se actualizó, el quehacer no existe
+            res.status(404).send({
+                error: null,
+                mensaje: 'El quehacer no existe.',
+                resultado: null,
+            });
+        } else {
+            // Confirmar actualización
+            res.status(200).send({
+                error: null,
+                mensaje: 'Quehacer actualizado.',
+                resultado: null,
+            });
+        }
+    } catch (error) {
+        // Si ocurrió algún error, lo atrapamos y lo enviamos
+        res.status(422).send({
+            error: error,
+            mensaje: (error.name === 'CastError') ? 'Id del quehacer incorrecto' : 'Hubo un problema al momento de realizar la actualización',
+            resultado: null,
+        });
+    }
+};
