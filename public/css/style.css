@@ -13,3 +13,12 @@ body {
     font-family: 'Lexend', sans-serif;
     color: var(--white);
 }
+
+.logo {
+    margin-top: 30px;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+}
