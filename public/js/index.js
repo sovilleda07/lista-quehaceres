@@ -91,8 +91,38 @@ const listaQuehaceres = () => {
     axios
         .get(`${url}/api/quehaceres`)
         .then(function (response) {
+            // Si hay resultados
             if (response.status == 200) {
-                console.log(response);
+                // Obtener la respuesta
+                const losQuehaceres = response.data.resultado;
+
+                // Realizar ciclo para mostrar cada quehacer
+                losQuehaceres.forEach(quehacer => {
+                    // HTML para cada uno de los quehaceres
+                    let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
+                                <div class="quehacer">
+                                    <div class="acciones">
+                                        ${!quehacer.completado ? '<span class="editar"><i class="fas fa-pen"></i></span>' : ''}
+                                        <span class="eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                    </div>
+                
+                                    <label class="tarea">
+                                        <input type="checkbox" class="checkbox" ${quehacer.completado ? 'checked' : ''}>
+                                        <span class="nombreQuehacer">${quehacer.tarea}</span>
+                                    </label>
+                                </div>
+                               </li>`;
+
+                    // Insertar el quehacer a la lista
+                    lista.insertAdjacentHTML('beforeend', li);
+                });
+
+                // Calcular quehaceres pendientes y mostrarlos
+                const pendientes = losQuehaceres.filter(x => !x.completado).length;
+                lista.insertAdjacentHTML('beforeend', `<span id="quehaceresPendientes">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
+
             } else {
                 Swal.fire({
                     icon: 'error',

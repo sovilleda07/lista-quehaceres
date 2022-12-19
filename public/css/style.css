@@ -110,9 +110,9 @@ input[type='checkbox'] {
     /* opacity: 0; */
 }
 
-/* .listaQuehaceres li:hover .quehacer .acciones {
-    opacity: 1;
-} */
+.listaQuehaceres li .quehacer .acciones span{
+    cursor: pointer;
+}
 
 .listaQuehaceres li .quehacer .acciones:first-child {
     padding-left: 8px;
