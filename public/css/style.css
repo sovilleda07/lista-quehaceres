@@ -26,14 +26,20 @@ body {
 h1 {
     text-align: center;
     color: white;
+    font-weight: 700;
 }
 
 .inputAgregar {
     margin-top: 20px;
 }
 
+#inputQuehacer {
+    font-weight: 400;
+}
+
 .btn-pink {
     color: var(--white);
+    font-weight: 500;
     background-color: var(--cyclamen);
     border-color: var(--cyclamen);
 }
@@ -48,15 +54,29 @@ ul {
     padding: 0;
 }
 
+input[type='checkbox'] {
+    transform: scale(1.2);
+    accent-color: var(--space-cadet);
+}
+
+/* Prueba lista */
 .listaQuehaceres {
+    display: flex;
+    flex-direction: column;
     margin: 20px 0;
+    background-color: rgba(244, 208, 220, 0.2);
+    padding: 15px 15px;
+    border-radius: 6px;
 }
 
 .listaQuehaceres li {
     border-radius: 6px;
-    margin-bottom: 8px;
-    position: relative;
+    margin-bottom: 12px;
     word-break: break-word;
+}
+
+.listaQuehaceres li:last-child {
+    margin-bottom: 0;
 }
 
 .listaQuehaceres li.pendiente {
@@ -70,67 +90,41 @@ ul {
 
 .listaQuehaceres li.completado label {
     text-decoration: line-through;
-    color: #fff;
+    color: var(--white);
 }
 
-.listaQuehaceres li.completado label .checkbox-mask {
-    border-color: transparent;
-}
-
-.listaQuehaceres li.completado label .checkbox-mask:after {
-    content: '\f00c';
-    font-family: 'FontAwesome';
-    display: block;
-    position: absolute;
-    top: -3px;
-    left: 0;
-}
-
-.listaQuehaceres li .checkbox {
+.listaQuehaceres li .quehacer {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
     margin: 0;
     padding: 10px 15px;
     border-radius: 5px;
 }
 
-.listaQuehaceres li label {
-    display: block;
-    padding-right: 10px;
+.listaQuehaceres li .quehacer .acciones {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    /* opacity: 0; */
 }
 
-.listaQuehaceres li label input[type='checkbox'] {
-    visibility: hidden;
+/* .listaQuehaceres li:hover .quehacer .acciones {
+    opacity: 1;
+} */
+
+.listaQuehaceres li .quehacer .acciones:first-child {
+    padding-left: 8px;
 }
 
-.listaQuehaceres li label .checkbox-mask {
-    display: block;
-    border: 2px solid #666;
-    width: 12px;
-    height: 12px;
-    border-radius: 2.5px;
-    position: absolute;
-    margin-left: -20px;
-    margin-top: 4px;
+.listaQuehaceres li .quehacer label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0;
+    gap: 8px;
 }
 
-.listaQuehaceres li .eliminar {
-    display: none;
-    position: absolute;
-    width: 12px;
-    height: 16px;
-    top: 50%;
-    margin-top: -8px;
-    right: 10px;
-    font-size: 16px;
-}
-
-.listaQuehaceres li .eliminar .fa {
-    line-height: 16px;
-}
-
-.listaQuehaceres li:hover .eliminar {
-    display: block;
-}
-
-.listaQuehaceres input[type="checkbox"] {
-    opacity: 0;
+.listaQuehaceres li .quehacer label .nombreQuehacer {
+    text-align: justify;
 }
