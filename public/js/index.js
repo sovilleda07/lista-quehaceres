@@ -6,6 +6,11 @@ const lista = document.querySelector('.listaQuehaceres');
 // URL base para realizar las peticiones
 const url = `${location.origin}`;
 
+// Cuando cargue el documento consultar los quehaceres
+document.addEventListener('DOMContentLoaded', () => {
+    listaQuehaceres();
+});
+
 // Evento en botón para agregar
 btnAgregar.addEventListener('click', (e) => {
     // Obtener el valor del input, removiendo los espacios en blanco
@@ -74,6 +79,36 @@ const agregarQuehacer = (nombreQuehacer) => {
                 icon: 'error',
                 title: 'Error',
                 text: `${error.response.data.mensaje}`,
+            });
+        });
+};
+
+/**
+ * Función para listar los quehaceres
+ */
+const listaQuehaceres = () => {
+    // Realizar petición
+    axios
+        .get(`${url}/api/quehaceres`)
+        .then(function (response) {
+            if (response.status == 200) {
+                console.log(response);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `${response.data.mensaje}`,
+                });
+            }
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text:
+                    error.message ||
+                    `${error.response.data.mensaje}` ||
+                    `${error.response.statusText}`,
             });
         });
 };

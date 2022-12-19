@@ -42,3 +42,95 @@ h1 {
     color: var(--white);
     background-color: var(--violet-red);
 }
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.listaQuehaceres {
+    margin: 20px 0;
+}
+
+.listaQuehaceres li {
+    border-radius: 6px;
+    margin-bottom: 8px;
+    position: relative;
+    word-break: break-word;
+}
+
+.listaQuehaceres li.pendiente {
+    background: var(--white);
+    color: var(--space-cadet);
+}
+
+.listaQuehaceres li.completado {
+    background: var(--violet-red);
+}
+
+.listaQuehaceres li.completado label {
+    text-decoration: line-through;
+    color: #fff;
+}
+
+.listaQuehaceres li.completado label .checkbox-mask {
+    border-color: transparent;
+}
+
+.listaQuehaceres li.completado label .checkbox-mask:after {
+    content: '\f00c';
+    font-family: 'FontAwesome';
+    display: block;
+    position: absolute;
+    top: -3px;
+    left: 0;
+}
+
+.listaQuehaceres li .checkbox {
+    margin: 0;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.listaQuehaceres li label {
+    display: block;
+    padding-right: 10px;
+}
+
+.listaQuehaceres li label input[type='checkbox'] {
+    visibility: hidden;
+}
+
+.listaQuehaceres li label .checkbox-mask {
+    display: block;
+    border: 2px solid #666;
+    width: 12px;
+    height: 12px;
+    border-radius: 2.5px;
+    position: absolute;
+    margin-left: -20px;
+    margin-top: 4px;
+}
+
+.listaQuehaceres li .eliminar {
+    display: none;
+    position: absolute;
+    width: 12px;
+    height: 16px;
+    top: 50%;
+    margin-top: -8px;
+    right: 10px;
+    font-size: 16px;
+}
+
+.listaQuehaceres li .eliminar .fa {
+    line-height: 16px;
+}
+
+.listaQuehaceres li:hover .eliminar {
+    display: block;
+}
+
+.listaQuehaceres input[type="checkbox"] {
+    opacity: 0;
+}
