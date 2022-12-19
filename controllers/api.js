@@ -10,11 +10,13 @@ exports.agregarQuehacer = async (req, res) => {
 
     // Almacenar en la base de datos
     try {
-        await quehacer.save();
+        // Retorna el quehacer guardado
+        const elQuehacer =  await quehacer.save();
+
         res.status(200).send({
             error: null,
             mensaje: 'Quehacer guardado.',
-            resultado: null,
+            resultado: elQuehacer,
         });
     } catch (error) {
         // Verificar si es un error de validación
