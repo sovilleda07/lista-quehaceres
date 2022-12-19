@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
-const router = require('./routes/index');
 require('dotenv').config();
 
 // Crea el servidor
 const app = express();
 const port = process.env.PORT || 9000;
+
+// Declaración de Routers
+const apiRouter = require('./routes/index');
+const vistaRouter = require('./routes/vista');
 
 // Conexión a MongoDB Atlas
 mongoose.set('strictQuery', false);
@@ -47,6 +50,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Implementar rutas
-app.use('/', router());
+app.use('/', vistaRouter());
+app.use('/api', apiRouter());
 
 app.listen(port, () => console.log('servidor escuchando en puerto', port));
