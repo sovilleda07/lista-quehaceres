@@ -1,0 +1,44 @@
+:root {
+    --space-cadet: #16315cff;
+    --violet-red: #eb5e92ff;
+    --cyclamen: #ed78a4ff;
+    --amaranth-pink: #f69bbeff;
+    --cameo-pink: #eab9ceff;
+    --mimi-pink: #f4d0dcff;
+    --white: #fff;
+}
+
+body {
+    background-color: var(--space-cadet);
+    font-family: 'Lexend', sans-serif;
+    color: var(--white);
+}
+
+.logo {
+    margin-top: 30px;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+}
+
+.inputAgregar {
+    margin-top: 20px;
+}
+
+.btn-pink {
+    color: var(--white);
+    background-color: var(--cyclamen);
+    border-color: var(--cyclamen);
+}
+
+.btn-pink:hover {
+    color: var(--white);
+    background-color: var(--violet-red);
+}
