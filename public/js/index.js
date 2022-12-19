@@ -150,6 +150,13 @@ const listarQuehaceres = (losQuehaceres) => {
         lista.insertAdjacentHTML('beforeend', li);
     });
 
+    contarPendientes();
+}
+
+/**
+ * Función para contar los quehaceres
+ */
+const contarPendientes = () => {
     // Calcular quehaceres pendientes y mostrarlos
     let pendientes = document.querySelectorAll(".pendiente").length;
     const spanPendientes = document.getElementById('quehaceresPendientes');
