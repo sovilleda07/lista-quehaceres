@@ -8,7 +8,7 @@ const url = `${location.origin}`;
 
 // Cuando cargue el documento consultar los quehaceres
 document.addEventListener('DOMContentLoaded', () => {
-    listaQuehaceres();
+    obtenerQuehaceres();
 });
 
 // Evento en botón para agregar
@@ -61,7 +61,14 @@ const agregarQuehacer = (nombreQuehacer) => {
             tarea: nombreQuehacer,
         })
         .then(function (response) {
+            // Validar si se guardó
             if (response.status == 200) {
+                // Limpiar input
+                input.value = '';
+
+                // Enviar respuesta a función para listar el quehacere
+                listarQuehaceres([response.data.resultado]);
+
                 Swal.fire({
                     icon: 'success',
                     title: `${response.data.mensaje}`,
@@ -86,43 +93,15 @@ const agregarQuehacer = (nombreQuehacer) => {
 /**
  * Función para listar los quehaceres
  */
-const listaQuehaceres = () => {
+const obtenerQuehaceres = () => {
     // Realizar petición
     axios
         .get(`${url}/api/quehaceres`)
         .then(function (response) {
             // Si hay resultados
             if (response.status == 200) {
-                // Obtener la respuesta
-                const losQuehaceres = response.data.resultado;
-
-                // Realizar ciclo para mostrar cada quehacer
-                losQuehaceres.forEach(quehacer => {
-                    // HTML para cada uno de los quehaceres
-                    let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
-                                <div class="quehacer">
-                                    <div class="acciones">
-                                        ${!quehacer.completado ? '<span class="editar"><i class="fas fa-pen"></i></span>' : ''}
-                                        <span class="eliminar">
-                                            <i class="fas fa-trash"></i>
-                                        </span>
-                                    </div>
-                
-                                    <label class="tarea">
-                                        <input type="checkbox" class="checkbox" ${quehacer.completado ? 'checked' : ''}>
-                                        <span class="nombreQuehacer">${quehacer.tarea}</span>
-                                    </label>
-                                </div>
-                               </li>`;
-
-                    // Insertar el quehacer a la lista
-                    lista.insertAdjacentHTML('beforeend', li);
-                });
-
-                // Calcular quehaceres pendientes y mostrarlos
-                const pendientes = losQuehaceres.filter(x => !x.completado).length;
-                lista.insertAdjacentHTML('beforeend', `<span id="quehaceresPendientes">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
-
+                // Enviar respuesta a función para listar los quehaceres
+                listarQuehaceres(response.data.resultado)
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -142,3 +121,40 @@ const listaQuehaceres = () => {
             });
         });
 };
+
+/**
+ * Función para adicionar un quehacer (li) a la lista (ul) en HTML.
+ * @param {Array object} losQuehaceres 
+ */
+const listarQuehaceres = (losQuehaceres) => {
+    // Realizar ciclo para mostrar cada quehacer
+    losQuehaceres.forEach(quehacer => {
+        // HTML para cada uno de los quehaceres
+        let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
+                    <div class="quehacer">
+                        <div class="acciones">
+                            ${!quehacer.completado ? '<span class="editar"><i class="fas fa-pen"></i></span>' : ''}
+                            <span class="eliminar">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+    
+                        <label class="tarea">
+                            <input type="checkbox" class="checkbox" ${quehacer.completado ? 'checked' : ''}>
+                            <span class="nombreQuehacer">${quehacer.tarea}</span>
+                        </label>
+                    </div>
+                   </li>`;
+
+        // Insertar el quehacer a la lista
+        lista.insertAdjacentHTML('beforeend', li);
+    });
+
+    // Calcular quehaceres pendientes y mostrarlos
+    let pendientes = document.querySelectorAll(".pendiente").length;
+    const spanPendientes = document.getElementById('quehaceresPendientes');
+    if (spanPendientes) {
+        spanPendientes.remove();
+    }
+    lista.insertAdjacentHTML('beforeend', `<span id="quehaceresPendientes">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
+}
