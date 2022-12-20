@@ -11,7 +11,7 @@ exports.agregarQuehacer = async (req, res) => {
     // Almacenar en la base de datos
     try {
         // Retorna el quehacer guardado
-        const elQuehacer =  await quehacer.save();
+        const elQuehacer = await quehacer.save();
 
         res.status(200).send({
             error: null,
@@ -130,7 +130,14 @@ exports.cambiarEstadoQuehacer = async (req, res) => {
         // Realizar actualización, enviando el filtro del id
         const elQuehacer = await Quehacer.findOneAndUpdate(
             { _id: id },
-            [{ $set: { completado: { $eq: [false, '$completado'] } } }],
+            [
+                {
+                    $set: {
+                        completado: { $eq: [false, '$completado'] },
+                        fechaModificado: new Date(),
+                    },
+                },
+            ],
             {
                 new: true,
                 runValidators: true,
@@ -224,7 +231,10 @@ exports.eliminarQuehaceresCompletados = async (req, res) => {
             // Confirmar eliminación
             res.status(200).send({
                 error: null,
-                mensaje: `Se eliminaron ${losQuehaceres.deletedCount} quehaceres.`,
+                mensaje:
+                    losQuehaceres.deletedCount > 1
+                        ? `Se eliminaron ${losQuehaceres.deletedCount} quehaceres.`
+                        : 'Se eliminó 1 quehacer.',
                 resultado: null,
             });
         }
