@@ -240,7 +240,9 @@ const listarQuehaceres = (losQuehaceres) => {
         let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
                     <div class="quehacer">
                         <div class="acciones">
-                            ${!quehacer.completado ? `<span class="editar" onClick="consultarQuehacer(this)"><i class="fas fa-pen"></i></span>` : ''}
+                            <span class="editar" onClick="consultarQuehacer(this)">
+                                <i class="fas fa-pen"></i>
+                            </span>
                             <span class="eliminar" onClick="eliminarQuehacer(this)">
                                 <i class="fas fa-trash"></i>
                             </span>

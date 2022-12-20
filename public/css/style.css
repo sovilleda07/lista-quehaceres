@@ -111,6 +111,9 @@ input[type='checkbox'] {
     color: var(--white);
 }
 
+.listaQuehaceres li.pendiente .quehacer .acciones .editar {
+    visibility: visible;
+}
 .listaQuehaceres li.completado .quehacer .acciones .editar {
     visibility: hidden;
 }
