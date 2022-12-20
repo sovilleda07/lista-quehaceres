@@ -147,5 +147,6 @@ lista-quehaceres
 
 ## Author
 
-- [@Sonia Villeda](https://github.com/sovilleda07)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/soniavilleda)
+- @Sonia Villeda
+- [Github](https://github.com/sovilleda07)
+- [Linkedin](www.linkedin.com/in/soniavilleda)
