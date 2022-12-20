@@ -6,6 +6,10 @@ const divQuehaceres = document.getElementById('quehaceres');
 const btnEliminarCompletados = document.getElementById('btnEliminarCompletados');
 const btnEliminarTodos = document.getElementById('btnEliminarTodos');
 
+// Manejo para editar y agregar
+let editar = false;
+let idEditar;
+
 // URL base para realizar las peticiones
 const url = `${location.origin}`;
 
@@ -21,8 +25,14 @@ btnAgregar.addEventListener('click', (e) => {
 
     // Evaluar si se ingresó el nombre
     if (valorInput.length > 0) {
-        // Llamado a función para agregar
-        agregarQuehacer(valorInput);
+        // Evaluar la acción a realizar
+        if (editar) {
+            // Llamado a función para agregar
+            actualizarQuehacer(valorInput);
+        } else {
+            // Llamado a función para agregar
+            agregarQuehacer(valorInput);
+        }
     } else {
         Swal.fire({
             icon: 'warning',
@@ -41,8 +51,14 @@ input.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
         // Evaluar si se ingresó el nombre
         if (valorInput.length > 0) {
-            // Llamado a función para agregar
-            agregarQuehacer(valorInput);
+            // Evaluar la acción a realizar
+            if (editar) {
+                // Llamado a función para agregar
+                actualizarQuehacer(valorInput);
+            } else {
+                // Llamado a función para agregar
+                agregarQuehacer(valorInput);
+            }
         } else {
             Swal.fire({
                 icon: 'warning',
@@ -224,7 +240,7 @@ const listarQuehaceres = (losQuehaceres) => {
         let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
                     <div class="quehacer">
                         <div class="acciones">
-                            ${!quehacer.completado ? '<span class="editar"><i class="fas fa-pen"></i></span>' : ''}
+                            ${!quehacer.completado ? `<span class="editar" onClick="consultarQuehacer(this)"><i class="fas fa-pen"></i></span>` : ''}
                             <span class="eliminar" onClick="eliminarQuehacer(this)">
                                 <i class="fas fa-trash"></i>
                             </span>
@@ -360,4 +376,92 @@ const eliminarQuehacer = (quehacerSeleccionado) => {
                 });
         }
     });
+};
+
+/**
+ * Función para consultar un quehacer
+ * @param {string} id 
+ */
+const consultarQuehacer = (quehacerSeleccionado) => {
+    // Capturar el elemento li
+    const li = quehacerSeleccionado.parentElement.closest('li');
+    // Capturar el id del quehacer
+    const id = li.dataset.id;
+
+    // Realizar petición
+    axios
+        .get(`${url}/api/quehaceres/${id}`)
+        .then(function (response) {
+            // Si hay resultados
+            if (response.status == 200) {
+                // Colocar valor en input
+                input.value = response.data.resultado.tarea;
+                input.focus();
+                // Establecer en true la acción y el id del quehacer a editar
+                editar = true;
+                idEditar = response.data.resultado._id;
+                // Cambiar texto del botón
+                btnAgregar.innerText = "Editar";
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `${response.data.mensaje}`,
+                });
+            }
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'warning',
+                title:
+                    `${error.response.data.mensaje}` ||
+                    `${error.response.statusText}` ||
+                    error.message,
+            });
+        });
+};
+
+/**
+ * Función para actualizar el nombre de un quehacer.
+ * @param {string} input 
+ */
+const actualizarQuehacer = (inputValor) => {
+    // Realizar petición
+    axios
+        .put(`${url}/api/editarQuehacer/${idEditar}`, {
+            tarea: inputValor,
+        })
+        .then(function (response) {
+            // Validar si se actualizó
+            if (response.status == 200) {
+                // Limpiar input
+                input.value = '';
+                // Establecer en false la acción
+                editar = false;
+                // Cambiar texto del botón
+                btnAgregar.innerText = 'Agregar';
+
+                // Cambiar el nombre en el span
+                let spanQuehacer = document.querySelector(`[data-id="${idEditar}"] span.nombreQuehacer`)
+                spanQuehacer.textContent = inputValor;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: `${response.data.mensaje}`,
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `${response.data.mensaje}`,
+                });
+            }
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `${error.response.data.mensaje}`,
+            });
+        });
 };
