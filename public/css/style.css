@@ -74,16 +74,16 @@ input[type='checkbox'] {
     padding-right: 8px;  
 }
 
-::-webkit-scrollbar {
+.listaQuehaceres #quehaceres::-webkit-scrollbar {
     width: 5px;
 }
-::-webkit-scrollbar-track {
+.listaQuehaceres #quehaceres::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
-::-webkit-scrollbar-thumb {
+.listaQuehaceres #quehaceres::-webkit-scrollbar-thumb {
     background: #888;
 }
-::-webkit-scrollbar-thumb:hover {
+.listaQuehaceres #quehaceres::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
