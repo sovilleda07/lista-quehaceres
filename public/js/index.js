@@ -2,6 +2,7 @@
 const input = document.getElementById('inputQuehacer');
 const btnAgregar = document.getElementById('btnAgregarQuehacer');
 const lista = document.querySelector('.listaQuehaceres');
+const btnEliminarCompletados = document.getElementById('btnEliminarCompletados');
 
 // URL base para realizar las peticiones
 const url = `${location.origin}`;
@@ -48,6 +49,52 @@ input.addEventListener('keyup', (e) => {
             });
         }
     }
+});
+
+// Evento en botón para eliminar los quehaceres completados
+btnEliminarCompletados.addEventListener('click', () => {
+    // Realizar consulta
+    Swal.fire({
+        icon: 'question',
+        title: '¿Está seguro de eliminar los quehaceres completados?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .delete(`${url}/api/eliminarQuehaceresCompletados`)
+                .then(function (response) {
+                    // Validar si se eliminó
+                    if (response.status == 200) {
+                        // Si se eliminan, se remueven de la lista
+                        let completados =
+                            document.querySelectorAll('.completado');
+                        completados.forEach((completado) => {
+                            completado.remove();
+                        });
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${response.data.mensaje}`,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `${response.data.mensaje}`,
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: `${error.response.data.mensaje}`,
+                    });
+                });
+        }
+    });
 });
 
 /**

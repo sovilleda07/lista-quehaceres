@@ -231,7 +231,10 @@ exports.eliminarQuehaceresCompletados = async (req, res) => {
             // Confirmar eliminación
             res.status(200).send({
                 error: null,
-                mensaje: `Se eliminaron ${losQuehaceres.deletedCount} quehaceres.`,
+                mensaje:
+                    losQuehaceres.deletedCount > 1
+                        ? `Se eliminaron ${losQuehaceres.deletedCount} quehaceres.`
+                        : 'Se eliminó 1 quehacer.',
                 resultado: null,
             });
         }
