@@ -250,11 +250,23 @@ const listarQuehaceres = (losQuehaceres) => {
 const contarPendientes = () => {
     // Calcular quehaceres pendientes y mostrarlos
     let pendientes = document.querySelectorAll(".pendiente").length;
+
+    // Condicional para mensaje según el número de pendientes
+    let mensajePendientes = '';
+    if (pendientes > 1) {
+        mensajePendientes = `Tienes ${pendientes} quehaceres pendientes`;
+    } else if (pendientes == 1) {
+        mensajePendientes = `Tienes ${pendientes} quehacer pendiente`;
+    } else {
+        mensajePendientes = 'No hay quehaceres pendientes';
+    }
+
+    // Si el span existe, eliminarlo
     const spanPendientes = document.getElementById('quehaceresPendientes');
     if (spanPendientes) {
         spanPendientes.remove();
     }
-    divQuehaceres.insertAdjacentHTML('afterend', `<span id="quehaceresPendientes" class="mt-2">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
+    divQuehaceres.insertAdjacentHTML('afterend', `<span id="quehaceresPendientes" class="mt-2">${mensajePendientes}</span>`);
 }
 
 /**
