@@ -237,7 +237,7 @@ const listarQuehaceres = (losQuehaceres) => {
     // Realizar ciclo para mostrar cada quehacer
     losQuehaceres.forEach(quehacer => {
         // HTML para cada uno de los quehaceres
-        let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
+        let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'} animate__animated animate__flipInX">
                     <div class="quehacer">
                         <div class="acciones">
                             <span class="editar" onClick="consultarQuehacer(this)">
@@ -258,6 +258,16 @@ const listarQuehaceres = (losQuehaceres) => {
         // Insertar el quehacer a la lista
         divQuehaceres.insertAdjacentHTML('beforeend', li);
     });
+
+    // Eliminar animación
+    setTimeout(function () {
+        let allElements = Array.from(
+            document.querySelectorAll('li')
+        );
+        for (let element of allElements) {
+            element.classList.remove('animate__flipInX');
+        }
+    }, 500);
 
     contarPendientes();
 }
