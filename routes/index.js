@@ -9,6 +9,9 @@ module.exports = () => {
     // Listar quehaceres
     router.get('/quehaceres', apiController.listarQuehaceres);
 
+    // Listar un quehacer
+    router.get('/quehaceres/:id', apiController.consultarQuehacer);
+
     // Actualizar quehacer
     router.put('/editarQuehacer/:id', apiController.editarQuehacer);
 

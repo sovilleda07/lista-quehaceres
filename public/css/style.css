@@ -59,7 +59,6 @@ input[type='checkbox'] {
     accent-color: var(--space-cadet);
 }
 
-/* Prueba lista */
 .listaQuehaceres {
     display: flex;
     flex-direction: column;
@@ -67,6 +66,25 @@ input[type='checkbox'] {
     background-color: rgba(244, 208, 220, 0.2);
     padding: 15px 15px;
     border-radius: 6px;
+}
+
+.listaQuehaceres #quehaceres {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 8px;  
+}
+
+.listaQuehaceres #quehaceres::-webkit-scrollbar {
+    width: 5px;
+}
+.listaQuehaceres #quehaceres::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.listaQuehaceres #quehaceres::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.listaQuehaceres #quehaceres::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .listaQuehaceres li {
@@ -93,6 +111,9 @@ input[type='checkbox'] {
     color: var(--white);
 }
 
+.listaQuehaceres li.pendiente .quehacer .acciones .editar {
+    visibility: visible;
+}
 .listaQuehaceres li.completado .quehacer .acciones .editar {
     visibility: hidden;
 }
@@ -113,7 +134,7 @@ input[type='checkbox'] {
     gap: 16px;
 }
 
-.listaQuehaceres li .quehacer .acciones span{
+.listaQuehaceres li .quehacer .acciones span {
     cursor: pointer;
 }
 

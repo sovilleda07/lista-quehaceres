@@ -6,6 +6,11 @@ const divQuehaceres = document.getElementById('quehaceres');
 const btnEliminarCompletados = document.getElementById('btnEliminarCompletados');
 const btnEliminarTodos = document.getElementById('btnEliminarTodos');
 
+// Manejo para editar y agregar
+let editar = false;
+let idEditar;
+const btnCancelar = '<button type="button" class="btn btn-danger" id="btnCancelar" onClick="cancelarEdicion()"><i class="fas fa-times"></i></button>';
+
 // URL base para realizar las peticiones
 const url = `${location.origin}`;
 
@@ -21,8 +26,14 @@ btnAgregar.addEventListener('click', (e) => {
 
     // Evaluar si se ingresó el nombre
     if (valorInput.length > 0) {
-        // Llamado a función para agregar
-        agregarQuehacer(valorInput);
+        // Evaluar la acción a realizar
+        if (editar) {
+            // Llamado a función para agregar
+            actualizarQuehacer(valorInput);
+        } else {
+            // Llamado a función para agregar
+            agregarQuehacer(valorInput);
+        }
     } else {
         Swal.fire({
             icon: 'warning',
@@ -41,8 +52,14 @@ input.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
         // Evaluar si se ingresó el nombre
         if (valorInput.length > 0) {
-            // Llamado a función para agregar
-            agregarQuehacer(valorInput);
+            // Evaluar la acción a realizar
+            if (editar) {
+                // Llamado a función para agregar
+                actualizarQuehacer(valorInput);
+            } else {
+                // Llamado a función para agregar
+                agregarQuehacer(valorInput);
+            }
         } else {
             Swal.fire({
                 icon: 'warning',
@@ -221,11 +238,13 @@ const listarQuehaceres = (losQuehaceres) => {
     // Realizar ciclo para mostrar cada quehacer
     losQuehaceres.forEach(quehacer => {
         // HTML para cada uno de los quehaceres
-        let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'}">
+        let li = `<li data-id="${quehacer._id}" class="${quehacer.completado ? 'completado' : 'pendiente'} animate__animated animate__flipInX">
                     <div class="quehacer">
                         <div class="acciones">
-                            ${!quehacer.completado ? '<span class="editar"><i class="fas fa-pen"></i></span>' : ''}
-                            <span class="eliminar">
+                            <span class="editar" onClick="consultarQuehacer(this)">
+                                <i class="fas fa-pen"></i>
+                            </span>
+                            <span class="eliminar" onClick="eliminarQuehacer(this)">
                                 <i class="fas fa-trash"></i>
                             </span>
                         </div>
@@ -241,6 +260,16 @@ const listarQuehaceres = (losQuehaceres) => {
         divQuehaceres.insertAdjacentHTML('beforeend', li);
     });
 
+    // Eliminar animación
+    setTimeout(function () {
+        let allElements = Array.from(
+            document.querySelectorAll('li')
+        );
+        for (let element of allElements) {
+            element.classList.remove('animate__flipInX');
+        }
+    }, 500);
+
     contarPendientes();
 }
 
@@ -250,11 +279,23 @@ const listarQuehaceres = (losQuehaceres) => {
 const contarPendientes = () => {
     // Calcular quehaceres pendientes y mostrarlos
     let pendientes = document.querySelectorAll(".pendiente").length;
+
+    // Condicional para mensaje según el número de pendientes
+    let mensajePendientes = '';
+    if (pendientes > 1) {
+        mensajePendientes = `Tienes ${pendientes} quehaceres pendientes`;
+    } else if (pendientes == 1) {
+        mensajePendientes = `Tienes ${pendientes} quehacer pendiente`;
+    } else {
+        mensajePendientes = 'No hay quehaceres pendientes';
+    }
+
+    // Si el span existe, eliminarlo
     const spanPendientes = document.getElementById('quehaceresPendientes');
     if (spanPendientes) {
         spanPendientes.remove();
     }
-    divQuehaceres.insertAdjacentHTML('afterend', `<span id="quehaceresPendientes" class="mt-2">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
+    divQuehaceres.insertAdjacentHTML('afterend', `<span id="quehaceresPendientes" class="mt-2">${mensajePendientes}</span>`);
 }
 
 /**
@@ -298,3 +339,163 @@ const cambiarEstado = (quehacerSeleccionado) => {
             });
         });
 };
+
+/**
+ * 
+ * @param {elementoHTML} quehacerSeleccionado 
+ */
+const eliminarQuehacer = (quehacerSeleccionado) => {
+    // Capturar el elemento li
+    const li = quehacerSeleccionado.parentElement.closest('li');
+    // Capturar el id del quehacer
+    const id = li.dataset.id;
+
+    // Realizar consulta
+    Swal.fire({
+        icon: 'question',
+        title: '¿Está seguro de eliminar el quehacer?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .delete(`${url}/api/eliminarQuehacer/${id}`)
+                .then(function (response) {
+                    // Validar si se eliminó
+                    if (response.status == 200) {
+                        // Si se elimina, se elimina de la lista y se realiza el conteo
+                        li.remove();
+                        contarPendientes();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${response.data.mensaje}`,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `${response.data.mensaje}`,
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: `${error.response.data.mensaje}`,
+                    });
+                });
+        }
+    });
+};
+
+/**
+ * Función para consultar un quehacer
+ * @param {string} id 
+ */
+const consultarQuehacer = (quehacerSeleccionado) => {
+    // Capturar el elemento li
+    const li = quehacerSeleccionado.parentElement.closest('li');
+    // Capturar el id del quehacer
+    const id = li.dataset.id;
+
+    // Realizar petición
+    axios
+        .get(`${url}/api/quehaceres/${id}`)
+        .then(function (response) {
+            // Si hay resultados
+            if (response.status == 200) {
+                // Colocar valor en input
+                input.value = response.data.resultado.tarea;
+                input.focus();
+                // Crear botón para cancelar operación de editar
+                input.insertAdjacentHTML('afterend', btnCancelar);
+                // Establecer en true la acción y el id del quehacer a editar
+                editar = true;
+                idEditar = response.data.resultado._id;
+                // Cambiar texto del botón
+                btnAgregar.innerText = "Editar";
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `${response.data.mensaje}`,
+                });
+            }
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'warning',
+                title:
+                    `${error.response.data.mensaje}` ||
+                    `${error.response.statusText}` ||
+                    error.message,
+            });
+        });
+};
+
+/**
+ * Función para actualizar el nombre de un quehacer.
+ * @param {string} input 
+ */
+const actualizarQuehacer = (inputValor) => {
+    // Realizar petición
+    axios
+        .put(`${url}/api/editarQuehacer/${idEditar}`, {
+            tarea: inputValor,
+        })
+        .then(function (response) {
+            // Validar si se actualizó
+            if (response.status == 200) {
+                // Limpiar input
+                input.value = '';
+                // Establecer en false la acción
+                editar = false;
+                // Cambiar texto del botón
+                btnAgregar.innerText = 'Agregar';
+
+                // Eliminar botón de cancelar acción
+                document.getElementById("btnCancelar").remove();
+
+                // Cambiar el nombre en el span
+                let spanQuehacer = document.querySelector(`[data-id="${idEditar}"] span.nombreQuehacer`)
+                spanQuehacer.textContent = inputValor;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: `${response.data.mensaje}`,
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `${response.data.mensaje}`,
+                });
+            }
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `${error.response.data.mensaje}`,
+            });
+        });
+};
+
+/**
+ * Función para cancelar la acción de editar un quehacer
+ */
+const cancelarEdicion = () => {
+    // Eliminar botón
+    document.getElementById("btnCancelar").remove();
+    // Limpiar input
+    input.value = '';
+    // Establecer en false la acción
+    editar = false;
+    // Borrar id
+    idEditar = '';
+    // Cambiar texto del botón
+    btnAgregar.innerText = 'Agregar';
+}

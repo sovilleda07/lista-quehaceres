@@ -279,3 +279,34 @@ exports.eliminarTodos = async (req, res) => {
         });
     }
 };
+
+// Consultar un quehacer
+exports.consultarQuehacer = async (req, res) => {
+    // Obtener el id del quehacer
+    const { id } = req.params;
+    try {
+        // Realizar la consulta
+        const elQuehacer = await Quehacer.findById(id);
+
+        // Si no hay quehaceres registrados
+        if (elQuehacer.length === 0) {
+            res.status(404).send({
+                error: null,
+                mensaje: 'El quehacer no existe.',
+                resultado: null,
+            });
+        } else {
+            res.status(200).send({
+                error: null,
+                mensaje: 'Listando quehacer',
+                resultado: elQuehacer,
+            });
+        }
+    } catch (error) {
+        res.status(422).send({
+            error: error,
+            mensaje: 'Hubo un problema al momento de consultar el quehacer.',
+            resultado: null,
+        });
+    }
+};
