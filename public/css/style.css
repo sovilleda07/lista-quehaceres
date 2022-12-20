@@ -93,6 +93,10 @@ input[type='checkbox'] {
     color: var(--white);
 }
 
+.listaQuehaceres li.completado .quehacer .acciones .editar {
+    visibility: hidden;
+}
+
 .listaQuehaceres li .quehacer {
     display: flex;
     flex-direction: row-reverse;
@@ -107,7 +111,6 @@ input[type='checkbox'] {
     display: flex;
     justify-content: space-between;
     gap: 16px;
-    /* opacity: 0; */
 }
 
 .listaQuehaceres li .quehacer .acciones span{

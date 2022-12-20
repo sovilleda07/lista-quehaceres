@@ -140,7 +140,7 @@ const listarQuehaceres = (losQuehaceres) => {
                         </div>
     
                         <label class="tarea">
-                            <input type="checkbox" class="checkbox" ${quehacer.completado ? 'checked' : ''}>
+                            <input type="checkbox" class="checkbox" onclick="cambiarEstado(this)" id="checkQuehacer" ${quehacer.completado ? 'checked' : ''}>
                             <span class="nombreQuehacer">${quehacer.tarea}</span>
                         </label>
                     </div>
@@ -165,3 +165,45 @@ const contarPendientes = () => {
     }
     lista.insertAdjacentHTML('beforeend', `<span id="quehaceresPendientes">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
 }
+
+/**
+ * Función para cambiar el estado a completado o pendiente
+ * @param {elementoHTML} quehacerSeleccionado 
+ */
+const cambiarEstado = (quehacerSeleccionado) => {
+    // Capturar el elemento li
+    const li = quehacerSeleccionado.parentElement.closest('li');
+    // Capturar el id del quehacer
+    const id = li.dataset.id;
+
+    // Realizar petición
+    axios
+        .put(`${url}/api/cambiarEstadoQuehacer/${id}`)
+        .then(function (response) {
+            // Validar si se actualizó
+            if (response.status == 200) {
+                // Validar si se hizo checked para añadir y eliminar clases del estado
+                if (quehacerSeleccionado.checked) {
+                    li.classList.add('completado');
+                    li.classList.remove('pendiente');
+                } else {
+                    li.classList.remove('completado');
+                    li.classList.add('pendiente');
+                }
+                contarPendientes();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `${response.data.mensaje}`,
+                });
+            }
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `${error.response.data.mensaje}`,
+            });
+        });
+};
