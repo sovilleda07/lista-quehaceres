@@ -2,7 +2,9 @@
 const input = document.getElementById('inputQuehacer');
 const btnAgregar = document.getElementById('btnAgregarQuehacer');
 const lista = document.querySelector('.listaQuehaceres');
+const divQuehaceres = document.getElementById('quehaceres');
 const btnEliminarCompletados = document.getElementById('btnEliminarCompletados');
+const btnEliminarTodos = document.getElementById('btnEliminarTodos');
 
 // URL base para realizar las peticiones
 const url = `${location.origin}`;
@@ -51,7 +53,7 @@ input.addEventListener('keyup', (e) => {
     }
 });
 
-// Evento en botón para eliminar los quehaceres completados
+// Evento click en botón para eliminar los quehaceres completados
 btnEliminarCompletados.addEventListener('click', () => {
     // Realizar consulta
     Swal.fire({
@@ -74,6 +76,48 @@ btnEliminarCompletados.addEventListener('click', () => {
                             completado.remove();
                         });
 
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${response.data.mensaje}`,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `${response.data.mensaje}`,
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: `${error.response.data.mensaje}`,
+                    });
+                });
+        }
+    });
+});
+
+// Evento click en botón para eliminar todos los quehaceres
+btnEliminarTodos.addEventListener('click', () => {
+    // Realizar consulta
+    Swal.fire({
+        icon: 'question',
+        title: '¿Está seguro de eliminar todos los quehaceres?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .delete(`${url}/api/eliminarQuehaceresTodos`)
+                .then(function (response) {
+                    // Validar si se eliminó
+                    if (response.status == 200) {
+                        // Si se eliminan, se limpia la lista y realiza conteo
+                        divQuehaceres.innerHTML = '';
+                        contarPendientes();
                         Swal.fire({
                             icon: 'success',
                             title: `${response.data.mensaje}`,
@@ -158,13 +202,13 @@ const obtenerQuehaceres = () => {
             }
         })
         .catch(function (error) {
+            contarPendientes();
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text:
-                    error.message ||
+                icon: 'warning',
+                title:
                     `${error.response.data.mensaje}` ||
-                    `${error.response.statusText}`,
+                    `${error.response.statusText}` ||
+                    error.message 
             });
         });
 };
@@ -194,7 +238,7 @@ const listarQuehaceres = (losQuehaceres) => {
                    </li>`;
 
         // Insertar el quehacer a la lista
-        lista.insertAdjacentHTML('beforeend', li);
+        divQuehaceres.insertAdjacentHTML('beforeend', li);
     });
 
     contarPendientes();
@@ -210,7 +254,7 @@ const contarPendientes = () => {
     if (spanPendientes) {
         spanPendientes.remove();
     }
-    lista.insertAdjacentHTML('beforeend', `<span id="quehaceresPendientes">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
+    divQuehaceres.insertAdjacentHTML('afterend', `<span id="quehaceresPendientes" class="mt-2">${(pendientes > 0) ? `Tienes ${pendientes} quehaceres pendientes` : 'No hay quehaceres pendientes'}</span>`);
 }
 
 /**
