@@ -1,4 +1,4 @@
-**# Lista de quehaceres**
+# Lista de quehaceres
 Lista de quehaceres para Code Challenge de PixelPay
 
 ## Tech Stack
@@ -143,7 +143,7 @@ lista-quehaceres
 ├─ package-lock.json
 ├─ package.json
 ├─ README.md
-
+```
 
 ## Author
 
