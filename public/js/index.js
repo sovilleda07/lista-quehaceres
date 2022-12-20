@@ -9,6 +9,7 @@ const btnEliminarTodos = document.getElementById('btnEliminarTodos');
 // Manejo para editar y agregar
 let editar = false;
 let idEditar;
+const btnCancelar = '<button type="button" class="btn btn-danger" id="btnCancelar" onClick="cancelarEdicion()"><i class="fas fa-times"></i></button>';
 
 // URL base para realizar las peticiones
 const url = `${location.origin}`;
@@ -409,6 +410,8 @@ const consultarQuehacer = (quehacerSeleccionado) => {
                 // Colocar valor en input
                 input.value = response.data.resultado.tarea;
                 input.focus();
+                // Crear botón para cancelar operación de editar
+                input.insertAdjacentHTML('afterend', btnCancelar);
                 // Establecer en true la acción y el id del quehacer a editar
                 editar = true;
                 idEditar = response.data.resultado._id;
@@ -453,6 +456,9 @@ const actualizarQuehacer = (inputValor) => {
                 // Cambiar texto del botón
                 btnAgregar.innerText = 'Agregar';
 
+                // Eliminar botón de cancelar acción
+                document.getElementById("btnCancelar").remove();
+
                 // Cambiar el nombre en el span
                 let spanQuehacer = document.querySelector(`[data-id="${idEditar}"] span.nombreQuehacer`)
                 spanQuehacer.textContent = inputValor;
@@ -477,3 +483,19 @@ const actualizarQuehacer = (inputValor) => {
             });
         });
 };
+
+/**
+ * Función para cancelar la acción de editar un quehacer
+ */
+const cancelarEdicion = () => {
+    // Eliminar botón
+    document.getElementById("btnCancelar").remove();
+    // Limpiar input
+    input.value = '';
+    // Establecer en false la acción
+    editar = false;
+    // Borrar id
+    idEditar = '';
+    // Cambiar texto del botón
+    btnAgregar.innerText = 'Agregar';
+}
