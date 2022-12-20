@@ -225,7 +225,7 @@ const listarQuehaceres = (losQuehaceres) => {
                     <div class="quehacer">
                         <div class="acciones">
                             ${!quehacer.completado ? '<span class="editar"><i class="fas fa-pen"></i></span>' : ''}
-                            <span class="eliminar">
+                            <span class="eliminar" onClick="eliminarQuehacer(this)">
                                 <i class="fas fa-trash"></i>
                             </span>
                         </div>
@@ -297,4 +297,55 @@ const cambiarEstado = (quehacerSeleccionado) => {
                 text: `${error.response.data.mensaje}`,
             });
         });
+};
+
+/**
+ * 
+ * @param {elementoHTML} quehacerSeleccionado 
+ */
+const eliminarQuehacer = (quehacerSeleccionado) => {
+    // Capturar el elemento li
+    const li = quehacerSeleccionado.parentElement.closest('li');
+    // Capturar el id del quehacer
+    const id = li.dataset.id;
+
+    // Realizar consulta
+    Swal.fire({
+        icon: 'question',
+        title: '¿Está seguro de eliminar el quehacer?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .delete(`${url}/api/eliminarQuehacer/${id}`)
+                .then(function (response) {
+                    // Validar si se eliminó
+                    if (response.status == 200) {
+                        // Si se elimina, se elimina de la lista y se realiza el conteo
+                        li.remove();
+                        contarPendientes();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${response.data.mensaje}`,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `${response.data.mensaje}`,
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: `${error.response.data.mensaje}`,
+                    });
+                });
+        }
+    });
 };
