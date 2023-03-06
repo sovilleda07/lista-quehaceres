@@ -1,6 +1,6 @@
 {
   "name": "lista-quehaceres",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lista de quehaceres Code Challenge de PixelPay",
   "main": "index.js",
   "scripts": {
