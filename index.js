@@ -16,7 +16,7 @@ const vistaRouter = require('./routes/vista');
 // Conexión a MongoDB Atlas
 mongoose.set('strictQuery', false);
 mongoose.connect(
-    `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.nsamh.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`,
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.1rurold.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,

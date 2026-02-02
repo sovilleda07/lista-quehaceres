@@ -5,19 +5,19 @@ Lista de quehaceres para Code Challenge de PixelPay
 
 **Frontend:** HTML, CSS, Javascript, Handlebars
 **Backend:** Node, MongoDB
-**Deploy:** Railway
+**Deploy:** 
 
 ## Demo
 
-https://lista-quehaceres.up.railway.app/
+
 
 ## Variables de entorno
 
 Para ejecutar este proyectos, necesitas agregar las siguientes variables de entorno en tu archivo .env
 
-`USER`,
-`PASSWORD`,
-`DATABASE`
+`MONGO_USER`,
+`MONGO_PASSWORD`,
+`MONGO_DATABASE`
 
 ## Ejecutar localmente
 
