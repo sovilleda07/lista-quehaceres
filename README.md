@@ -5,11 +5,10 @@ Lista de quehaceres para Code Challenge de PixelPay
 
 **Frontend:** HTML, CSS, Javascript, Handlebars
 **Backend:** Node, MongoDB
-**Deploy:** 
+**Deploy:** Render
 
 ## Demo
-
-
+https://lista-quehaceres.onrender.com/
 
 ## Variables de entorno
 
